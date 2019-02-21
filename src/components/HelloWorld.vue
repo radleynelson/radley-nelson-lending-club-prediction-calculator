@@ -64,8 +64,8 @@
       <div class="control">
         <input v-model="DebtToIncome" class="input" type="number" placeholder="">
       </div>
-      <p style="display: none;" class="help is-danger">
-        This field is required
+      <p class="help is-danger" v-bind:class="{hide: validDTI}">
+        {{validDTIMessage}}
       </p>
     </div>
   </div>
@@ -80,8 +80,8 @@
       <div class="control">
         <input v-model="AverageFico" class="input" type="number" placeholder="">
       </div>
-      <p style="display: none;" class="help is-danger">
-        This field is required
+      <p class="help is-danger" v-bind:class="{hide: validFico}">
+        {{validFicoMessage}}
       </p>
     </div>
   </div>
@@ -96,8 +96,8 @@
       <div class="control">
         <input v-model="AccountsOpened" class="input" type="number" placeholder="">
       </div>
-      <p style="display: none;" class="help is-danger">
-        This field is required
+      <p class="help is-danger" v-bind:class="{hide: validAccountsOpen}">
+        {{validAccountsOpenMessage}}
       </p>
     </div>
   </div>
@@ -112,8 +112,8 @@
       <div class="control">
         <input v-model="TotalCurrentBalance" class="input" type="number" placeholder="">
       </div>
-      <p style="display: none;" class="help is-danger">
-        This field is required
+      <p class="help is-danger" v-bind:class="{hide: validTotalCurrentBalance}">
+        {{validTotalCurrentBalanceMessage}}
       </p>
     </div>
   </div>
@@ -128,8 +128,8 @@
       <div class="control">
         <input v-model="TotalAccounts" class="input" type="number" placeholder="">
       </div>
-      <p style="display: none;" class="help is-danger">
-        This field is required
+      <p class="help is-danger" v-bind:class="{hide: validTotalAccounts}">
+        {{validTotalAccountMessages}}
       </p>
     </div>
   </div>
@@ -143,7 +143,7 @@
   <div class="field-body">
     <div class="field">
       <div class="control">
-        <button @click="Predict" class="button is-primary">
+        <button @click="checkForm" class="button is-primary">
           Submit
         </button>
       </div>
@@ -179,6 +179,22 @@ export default {
       TotalCurrentBalance: "",
       TotalAccounts: "",
       result: "",
+      validCreditCard: true,
+      validCreditCardMessage: "This field is required",
+      validIncome: true,
+      validIncomeMessage: "This field is required",
+      validRent: true,
+      validRentMessage: "This field is required",
+      validDTI: true,
+      validDTIMessage: "This field is required",
+      validFico: true,
+      validFicoMessage: "This field is required",
+      validAccountsOpen: true,
+      validAccountsOpenMessage: "This field is required",
+      validTotalCurrentBalance: true,
+      validTotalCurrentBalanceMessage: "This field is required",
+      validTotalAccounts: true,
+      validTotalAccountMessages:"This field is required"
 
     }
   },
@@ -187,8 +203,99 @@ export default {
   },
   methods: {
     checkForm(){
-      if(this.DebtToIncome == "" || this.DebtToIncome.includes('-')) {
-        
+      let checker = true;
+      if(this.DebtToIncome == "" ) {
+        this.validDTI = false;
+        this.validDTIMessage = "Debt To Income is a required numeric field."
+        checker = false;
+      }
+      else if(this.DebtToIncome.includes("-") ) {
+        this.validDTI = false;
+        this.validDTIMessage = "Please Enter a Positive Number"
+        checker = false;
+      }
+      else if(isNaN(this.DebtToIncome) == true) {
+        this.validDTI = false;
+        this.validDTIMessage = "Please Enter a Positive Number"
+        checker = false;
+      }
+      else{
+        this.validDTI = true;
+      }
+      if(this.AverageFico == ""){
+        this.validFico = false;
+        this.validFicoMessage = "Average Fico Score is a required numeric field";
+        checker = false;
+      }
+      else if(this.AverageFico.includes('-')){
+        this.validFico = false;
+        this.validFicoMessage = "Please enter a Positive Fico Score";
+        checker = false;
+      }
+      else if(isNaN(this.AverageFico) == true) {
+        this.validFico = false;
+        this.validFico = "Please Enter a Positive Number"
+        checker = false;
+      }
+      else{
+        this.validFico = true;
+      }
+      if(this.AccountsOpened == ''){
+        this.validAccountsOpen = false;
+        this.validAccountsOpenMessage = "Number of Total Accounts Open is a required numeric field";
+        checker = false;
+      }
+      else if(this.AccountsOpened.includes('-')){
+        this.validAccountsOpen = false;
+        this.validAccountsOpenMessage = "Please Enter a Positive Number of Accounts";
+        checker = false;
+      }
+      else if(isNaN(this.AccountsOpened) == true){
+        this.validAccountsOpen = false;
+        this.validAccountsOpenMessage = "Please Enter a Positive Number of Accounts";
+        checker = false;
+      }
+      else{
+        this.validAccountsOpen = true;
+      }
+      if(this.TotalCurrentBalance == ""){
+        this.validTotalCurrentBalance = false;
+        this.validTotalCurrentBalanceMessage = "Total Current Balance is a required numeric field";
+        checker = false; 
+      }
+      else if(this.TotalCurrentBalance.includes('-')){
+        this.validTotalCurrentBalance = false;
+        this.validTotalCurrentBalanceMessage = "Please Enter a Positive Total Current Balance";
+        chekcer = false;
+      }
+      else if(isNaN(this.TotalCurrentBalance) == true){
+        this.validTotalCurrentBalance = false;
+        this.validTotalCurrentBalanceMessage = "Please Enter a Positive Total Current Balance";
+        checker = false;
+      }
+      else{
+        this.validTotalCurrentBalance = true;
+      }
+      if(this.TotalAccounts == ''){
+        this.validTotalAccounts = false;
+        this.validTotalAccountMessages = "Total Accounts is a required numeric field";
+        checker = false;
+      }
+      else if(this.TotalAccounts.includes('-')){
+        this.validTotalAccounts = false;
+        this.validTotalAccountMessages = "Please Enter 0 or a Positive Number of Accounts";
+        checker = false;
+      }
+      else if(isNaN(this.TotalAccounts) == true){
+        this.validTotalAccounts = false;
+        this.validTotalAccountMessages = "Please Enter 0 or a Positive Number of Accounts"
+        checker = false;
+      }
+      else{
+        this.validTotalAccounts = true;
+      }
+      if(checker == true){
+        this.Predict();
       }
     },
     Predict() {
@@ -246,5 +353,8 @@ li {
 }
 a {
   color: #42b983;
+}
+.hide{
+  display: none;
 }
 </style>
